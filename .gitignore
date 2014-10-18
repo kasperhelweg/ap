@@ -1,0 +1,12 @@
+# Haskell
+*.hi
+*.o
+
+  # HLint
+*.html
+*.htm
+
+# Executables
+Program
+
+erlang/datasets/
