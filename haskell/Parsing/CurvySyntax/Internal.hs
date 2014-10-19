@@ -1,5 +1,5 @@
 -- In Haskell, create a Molamil Docker API to set up virtual machines.
--- In erlang create a push api and the julebryg game.
+-- In erlang create a push api and the julebryg game. push API using map reduce?
 
 module CurvySyntax.Internal where
 import Debug.Trace
@@ -21,11 +21,6 @@ data ErrorType = ParseError
 
 data Error = Error { errorType :: ErrorType }
            deriving (Show, Eq)
-
-data Expr2 = Zeroterm
-          | Oneterm
-          | Minus Expr2 Expr2
-          deriving (Eq, Show)
 
 -- |
 -- API
@@ -58,15 +53,26 @@ defs = do d  <- def
        
 def = do id <- ident; schar '='; curve <- curve;
          return $ Def id curve []
-              
+
+curve = return $ Single (Point (Const 3) (Const 4))
+
+point  = undefined
+expr   = undefined
+
 ident = do token $ many1 ( letter <|> num <|> underscore ) >>= \id -> return id
   where letter     = satisfy isLetter
         num        = satisfy isDigit
         underscore = schar '_'
 
-curve = return $ Single (Point (Const 3) (Const 4))
+number = undefined
+
 
 -------
+data Expr2 = Zeroterm
+          | Oneterm
+          | Minus Expr2 Expr2
+          deriving (Eq, Show)
+                   
 e = do tv <- t
        ev <- eopt tv
        return ev
