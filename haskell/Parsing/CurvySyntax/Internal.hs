@@ -62,17 +62,44 @@ dopt = do symbol "where"
           return ds
        <|> return []
 
-curve = return $ Single (Point (Const 3) (Const 4))
+curve = do chainl1 curve' op
 
-point = return Point (Const 3) (Const 4)
-expr  = undefined
+curve' = do schar '('
+            c <- curve
+            schar ')'
+            return c
+         <|> do p <- point
+                return $ Single p
+         <|> do id <- ident
+                return $ Id id
+
+op = do symbol "++"
+        return Connect
+     <|> do schar '^'
+            return Over
+
+point = do schar '('
+           e1 <- expr
+           schar ','
+           e2 <- expr
+           schar ')'
+           return $ Point e1 e2
+
+expr  = do e <- number 
+           return $ Const e 
 
 ident = do token $ many1 ( letter <|> num <|> underscore ) >>= \id -> return id
   where letter     = satisfy isLetter
         num        = satisfy isDigit
         underscore = schar '_'
 
-number = undefined
+number = token (do pre <- digits
+                   char '.'
+                   post <- digits
+                   return $ read $ pre ++ "." ++ post
+                <|> do num <- digits
+                       return $ read num )
+  where digits = many1 (satisfy isDigit)
 
 
 -------
