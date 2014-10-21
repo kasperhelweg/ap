@@ -1,0 +1,15 @@
+* Code snippets
+  This snippet build a tree as my original solution to the defs problem.
+  
+#+NAME: Haskell strange recursion
+#+BEGIN_SRC haskell
+defs = do d  <- def
+          ds <- defs
+          let Def id curve ds' = d in
+           return $ Def id curve ds:ds'
+      <|> return []
+                       
+def = do id <- ident; schar '='; curve <- curve;
+         return $ Def id curve []
+#+END_SRC
+#+RESULT

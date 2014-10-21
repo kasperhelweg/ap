@@ -4,6 +4,11 @@
 ---         |  Def Defs
 -- Def   ::= Ident '=' Curve
 ---       |  Ident '=' Curve 'where' '{' Defs '}'
+
+--Def    -> Ident '=' Curve Dopt
+--Dopt   -> 'where' '{' Defs '}'
+--        | e. 
+
 -- Curve ::= Curve '++' Curve
 ---       |  Curve '^' Curve
 ---       |  Curve '->' Point
