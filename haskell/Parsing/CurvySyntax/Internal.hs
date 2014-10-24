@@ -44,6 +44,9 @@ parseFile filename = fmap parseString $ readFile filename
 --
 
 -- Redundant...
+
+reserved = ["where", "refv", "refh", "rot", "width", "height"]
+
 program = do defs >>= \ds -> return ds
 
 defs = do many1 def >>= \ds -> return ds
@@ -70,11 +73,11 @@ curves = do c  <- curve
 curve = do p <- point
            return (Single p)
 
-curveopt inval = (do symbol "++"
-                     c  <- curve
-                     cv <- curveopt (Connect inval c)
-
-                     return cv)
+curveopt inval = do symbol "++"
+                    c  <- curve
+                    cv <- curveopt (Connect inval c)
+                     
+                    return cv
                  <|> do symbol "^"
                         c  <- curve
                         cv <- curveopt (Over inval c)
@@ -107,6 +110,60 @@ curveopt inval = (do symbol "++"
                         return cv
                  <|> return inval
 
+point = do schar '('
+           e1 <- expr
+           schar ','
+           e2 <- expr
+           schar ')'
+           return $ Point e1 e2
+
+expr = do e <- number 
+          return $ Const e 
+
+ident = do token $
+             many1 ( letter
+                     <|> num
+                     <|> underscore )
+             >>= \id -> case (elem id reserved) of
+                         True -> reject
+                         otherwise -> return id
+  
+  where letter     = satisfy isLetter
+        num        = satisfy isDigit
+        underscore = schar '_'
+        
+number = token (do pre <- digits
+                   char '.'
+                   post <- digits
+                   return $ read $ pre ++ "." ++ post
+                <|> do num <- digits
+                       return $ read num )
+  where digits = many1 (satisfy isDigit)
+
+-------
+{-
+data Expr2 = Zeroterm
+          | Oneterm
+          | Minus Expr2 Expr2
+          deriving (Eq, Show)
+                   
+e = do tv <- t
+       ev <- eopt tv
+       return ev
+       
+eopt inval = (do schar '-'
+                 tv <- t
+                 ev <- eopt (Minus inval tv)
+                 return ev)
+             <|> return inval
+
+t = (do schar '0'
+        return Zeroterm)
+    <|> (do schar '1'
+            return Oneterm)
+-}
+
+-------------------
 {-
 curve = do schar '('
            c <- curve
@@ -159,50 +216,4 @@ op = do symbol "++"
             return Rot
 
 
--}
-point = do schar '('
-           e1 <- expr
-           schar ','
-           e2 <- expr
-           schar ')'
-           return $ Point e1 e2
-
-expr  = do e <- number 
-           return $ Const e 
-
-ident = do token $ many1 ( letter <|> num <|> underscore ) >>= \id -> return id
-  where letter     = satisfy isLetter
-        num        = satisfy isDigit
-        underscore = schar '_'
-
-number = token (do pre <- digits
-                   char '.'
-                   post <- digits
-                   return $ read $ pre ++ "." ++ post
-                <|> do num <- digits
-                       return $ read num )
-  where digits = many1 (satisfy isDigit)
-
-
--------
-{-
-data Expr2 = Zeroterm
-          | Oneterm
-          | Minus Expr2 Expr2
-          deriving (Eq, Show)
-                   
-e = do tv <- t
-       ev <- eopt tv
-       return ev
-       
-eopt inval = (do schar '-'
-                 tv <- t
-                 ev <- eopt (Minus inval tv)
-                 return ev)
-             <|> return inval
-
-t = (do schar '0'
-        return Zeroterm)
-    <|> (do schar '1'
-            return Oneterm)
 -}

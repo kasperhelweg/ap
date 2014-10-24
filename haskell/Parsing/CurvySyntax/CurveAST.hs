@@ -41,7 +41,7 @@ CurveOpt -> "++"   Curve CurveOpt
 
 -- Point ::= '(' Expr ',' Expr ')'
 -- Expr  ::= Expr '+' Expr
---        |  Expr  '*' Expr
+--        |  Expr '*' Expr
 --        | 'width' Curve
 --        | 'height' Curve
 --        | Number
