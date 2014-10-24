@@ -11,14 +11,33 @@
 
 -- Curve ::= Curve '++' Curve
 ---       |  Curve '^' Curve
+
 ---       |  Curve '->' Point
 ---       |  Curve '**' Expr
 ---       |  Curve 'refv' Expr
 ---       |  Curve 'refh' Expr
 ---       |  Curve 'rot' Expr
+
 ---       |  '(' Curve ')'
 ---       |  Point
 ---       |  Ident
+
+
+{-
+Curve -> Point CurveOpt
+       | Ident CurveOpt
+       | '(' Curve ')'
+
+CurveOpt -> "++"   Curve CurveOpt
+          | "^"    Curve CurveOpt
+          | "->"   Point CurveOpt
+          | "**"   Expr  CurveOpt
+          | "refv" Expr  CurveOpt
+          | "refh" Expr  CurveOpt
+          | "rot"  Expr  CurveOpt
+-}
+
+
 
 -- Point ::= '(' Expr ',' Expr ')'
 -- Expr  ::= Expr '+' Expr
