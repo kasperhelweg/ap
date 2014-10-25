@@ -10,3 +10,5 @@
 Program
 
 erlang/datasets/
+/erlang/mr.beam
+/erlang/tests.beam

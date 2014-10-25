@@ -11,12 +11,15 @@ start(N) ->
     {Reducer, Mappers} = init(N),
     {ok, spawn(fun() -> coordinator_loop(Reducer, Mappers) end)}.
 
-stop(Pid) -> ....
-job(CPid, MapFun, RedFun, RedInit, Data) -> ....
+stop(Pid) -> {ok, stub} .
 
+job(CPid, MapFun, RedFun, RedInit, Data) -> {ok, stub} .
 
 %%%% Internal implementation
-init(N) -> ....
+init(N) -> Reducer =  spawn( fun()-> reducer_loop() end),
+	   Mappers = [spawn( fun()-> mapper_loop(Reducer, none) end) || _ <- lists:seq(1,N)],
+	   
+	   {Reducer, Mappers}.
 
 %% synchronous communication
 rpc(Pid, Request) ->
@@ -35,7 +38,6 @@ reply_ok(From) ->
 reply_ok(From, Msg) ->
     reply(From, {ok, Msg}).
 
-% hello you
 
 %% asynchronous communication
 async(Pid, Msg) ->
@@ -54,8 +56,7 @@ coordinator_loop(Reducer, Mappers) ->
 	    io:format("~p stopping~n", [self()]),
 	    lists:foreach(fun stop_async/1, Mappers),
 	    stop_async(Reducer),
-	    reply_ok(From);
-	....
+	    reply_ok(From)
     end.
 
 
@@ -75,13 +76,13 @@ reducer_loop() ->
     receive
 	stop -> 
 	    io:format("Reducer ~p stopping~n", [self()]),
-	    ok;
-        ....
+	    ok,
+	    reducer_loop
     end.
 
 gather_data_from_mappers(Fun, Acc, Missing) ->
     receive
-	...
+	_ -> {ok, stub}
     end.
 
 
@@ -91,7 +92,7 @@ mapper_loop(Reducer, Fun) ->
 	stop -> 
 	    io:format("Mapper ~p stopping~n", [self()]),
 	    ok;
-	....
+	
 	Unknown ->
 	    io:format("unknown message: ~p~n",[Unknown]), 
 	    mapper_loop(Reducer, Fun)
