@@ -2,13 +2,15 @@
 *.hi
 *.o
 
-  # HLint
+# HLint
 *.html
 *.htm
 
-# Executables
+# Erlang
+*.beam
+
+# Specific
 Program
 
+# Data
 erlang/datasets/
-/erlang/mr.beam
-/erlang/tests.beam
