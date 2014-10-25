@@ -35,6 +35,7 @@ reply_ok(From) ->
 reply_ok(From, Msg) ->
     reply(From, {ok, Msg}).
 
+% hello you
 
 %% asynchronous communication
 async(Pid, Msg) ->
