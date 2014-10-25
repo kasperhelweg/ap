@@ -3,7 +3,7 @@
 %%% @copyright (C) 2011, Ken Friis Larsen
 %%% Created : Oct 2011 by Ken Friis Larsen <kflarsen@diku.dk>
 %%%-------------------------------------------------------------------
--module(mr_skel).
+-module(mr).
 -export([start/1, stop/1, job/5]).
 
 %%%% Interface
@@ -46,8 +46,6 @@ stop_async(Pid) ->
 
 data_async(Pid, D) ->
     async(Pid, {data, D}).
-
-
 
 %%% Coordinator
 coordinator_loop(Reducer, Mappers) ->
