@@ -53,6 +53,7 @@ from_file(FileName) ->
 %%
 %% @end
 %%--------------------------------------------------------------------
+
 parse_track(Track) ->
     [TrackId,MxmId| Rest] = binary:split(Track, <<$,>>, [global,trim]),
     {TrackId,MxmId,lists:map(fun parse_count/1, Rest)}.
@@ -65,7 +66,6 @@ parse_track(Track) ->
 parse_words_line(<<$%,WLine/binary>>) ->
     lists:map(fun binary_to_list/1, binary:split(WLine, <<$,>>, [global,trim])).
 
-
 parse_count(CBin) ->
     [Widx,Cnt] = binary:split(CBin,<<$:>>),
     {bin_to_int(Widx), bin_to_int(Cnt)}.
@@ -73,7 +73,6 @@ parse_count(CBin) ->
 bin_to_int(Bin) ->			       
     list_to_integer(binary_to_list(Bin)).
    
-
 bsplit(Bin, Char) ->
     bsplit(Char, Bin, 0, []).
 

@@ -3,30 +3,22 @@
 %%% @copyright (C) 2011, Ken Friis Larsen
 %%% Created : Oct 2011 by Ken Friis Larsen <kflarsen@diku.dk>
 %%%-------------------------------------------------------------------
--module(mr).
-
+-module(mr_skel).
 -export([start/1, stop/1, job/5]).
 
 %%%% Interface
-
 start(N) ->
     {Reducer, Mappers} = init(N),
     {ok, spawn(fun() -> coordinator_loop(Reducer, Mappers) end)}.
 
-
 stop(Pid) -> ....
-
 job(CPid, MapFun, RedFun, RedInit, Data) -> ....
 
 
 %%%% Internal implementation
-
-
 init(N) -> ....
 
-
 %% synchronous communication
-
 rpc(Pid, Request) ->
     Pid ! {self(), Request},
     receive
@@ -57,7 +49,6 @@ data_async(Pid, D) ->
 
 
 %%% Coordinator
-
 coordinator_loop(Reducer, Mappers) ->
     receive
 	{From, stop} ->
@@ -96,7 +87,6 @@ gather_data_from_mappers(Fun, Acc, Missing) ->
 
 
 %%% Mapper
-
 mapper_loop(Reducer, Fun) ->
     receive
 	stop -> 
