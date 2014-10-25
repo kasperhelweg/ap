@@ -45,7 +45,6 @@ reply_ok(From, Msg) ->
 
 
 %% asynchronous communication
-
 async(Pid, Msg) ->
     Pid ! Msg.
 
@@ -82,7 +81,6 @@ send_loop(Mappers, [], Data) ->
 
 
 %%% Reducer
-
 reducer_loop() ->
     receive
 	stop -> 
