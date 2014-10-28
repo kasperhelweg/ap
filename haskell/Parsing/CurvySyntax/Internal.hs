@@ -66,20 +66,41 @@ dopt = do symbol "where"
           return ds
        <|> return []
 
-curves = do c  <- curve
+{-
+One can use this : Remove the ++ and ^ alternative from curveopt, and rename
+current curves function to curve.
+
+cop0 = do symbol "++"
+          return Connect
+cop1 = do schar '^'
+          return Over
+
+curves  = chainl1 curves' cop0
+          <++ curve
+curves' = chainl1 curve   cop1
+-}
+        
+-- C0 : Curves without left recursion, but no precedense
+curves = do c  <- curvet
             cv <- curveopt c
             return cv
-
-curve = do p <- point
-           return (Single p)
+            
+curvet = do p <- point
+            return (Single p)
+         <|> do id <- ident
+                return (Id id)
+         <|> do schar '('
+                c <- curves
+                schar ')'
+                return c
 
 curveopt inval = do symbol "++"
-                    c  <- curve
+                    c  <- curvet
                     cv <- curveopt (Connect inval c)
                      
                     return cv
                  <|> do symbol "^"
-                        c  <- curve
+                        c  <- curvet
                         cv <- curveopt (Over inval c)
                         
                         return cv
@@ -110,24 +131,86 @@ curveopt inval = do symbol "++"
                         return cv
                  <|> return inval
 
+-- Expressions using chainl1
+{-
+expr = chainl1 term op0
+term = chainl1 factor op1
+
+op0 = do schar '+'
+         return Add
+         
+op1 = do schar '*'
+         return Mult
+
+factor = do e <- number
+            return (Const e)
+         <|> do symbol "width"
+                c <- curve
+
+                return (Width c)
+         <|> do symbol "height"
+                c <- curve
+
+                return (Height c)
+         <|> do schar '('
+                e <- expr
+                schar ')'
+
+                return e
+-}
+
+-- Expressins using direct grammar rewriting
+expr = do t <- term
+          exprOpt t
+                    
+exprOpt inval = do schar '+'
+                   t    <- term
+                   eopt <- exprOpt (Add inval t)
+
+                   return eopt
+                <|> return inval
+
+term = do f    <- factor
+          topt <- termOpt f
+          return topt
+
+termOpt inval = do schar '*'
+                   f    <- factor
+                   topt <- termOpt (Mult inval f)
+                   
+                   return topt
+                <|> return inval
+                
+factor = do e <- number
+            return (Const e)
+         <|> do symbol "width"
+                c <- curves
+
+                return (Width c)
+         <|> do symbol "height"
+                c <- curves
+
+                return (Height c)
+         <|> do schar '('
+                e <- expr
+                schar ')'
+
+                return e
+
 point = do schar '('
            e1 <- expr
            schar ','
            e2 <- expr
            schar ')'
+
            return $ Point e1 e2
 
-expr = do e <- number 
-          return $ Const e 
-
 ident = do token $
-             many1 ( letter
-                     <|> num
-                     <|> underscore )
+             many1 ( letter <|> num <|> underscore )
              >>= \id -> case (elem id reserved) of
-                         True -> reject
+                         True      -> reject
                          otherwise -> return id
-  
+                         
   where letter     = satisfy isLetter
         num        = satisfy isDigit
         underscore = schar '_'
@@ -138,8 +221,10 @@ number = token (do pre <- digits
                    return $ read $ pre ++ "." ++ post
                 <|> do num <- digits
                        return $ read num )
+         
   where digits = many1 (satisfy isDigit)
 
+----------------------------EXPERIMENTS AND STUFF
 -------
 {-
 data Expr2 = Zeroterm
@@ -214,6 +299,4 @@ op = do symbol "++"
             return Refh
      <|> do symbol "rot"
             return Rot
-
-
 -}
