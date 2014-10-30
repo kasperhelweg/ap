@@ -66,7 +66,6 @@ nmdecls = many nmdecl >>= \nd -> return nd
 
 nmdecl :: Parser NamedMethodDecl
 nmdecl  = do n <- name
-             traceM $ "name: " ++ show n
              schar '('; p  <- params; schar ')'
              schar '{'; es <- exprs;  schar '}'
 
@@ -120,23 +119,73 @@ eop1 = do schar '*'
        <|> do schar '/'
               return DividedBy
 
--- left factorize (chainl1)
-
 exprs = do e <- expr
            schar ';'
            es <- exprs
            return (e:es)
         <|> return [ ]
 
+-- Look into the naming of these
 expr  = chainl1 expr' eop0
-         <++ expro         
+         <++ expro
 expr' = chainl1 expro eop1
 
+
+
+-- some of this could be refactored alot. for example 'set'
 expro = do i <- integer
            return $ IntConst i
         <|> do s <- stringg
                return $ StringConst s
-
+        <|> do n <- name
+               return $ ReadVar n
+        <|> do n <- name
+               schar '('; as <- args; schar ')'
+               return $ TermLiteral n as
+        <|> do symbol "self"
+               return Self
+        <|> do symbol "return"
+               e <- expr
+               return $ Return e
+        <|> do symbol "set"
+               symbol "self"
+               schar '.'
+               n <- name
+               schar '='
+               e <- expr
+               return $ SetField n e
+        <|> do symbol "set"
+               n <- name
+               schar '='
+               e <- expr
+               return $ SetVar n e
+        <|> do symbol "match"
+               e <- expr
+               schar '{'; cs <- cases; schar '}'
+               return $ Match e cs
+        <|> do symbol "send"
+               schar '{'
+               e1 <- expr
+               schar ','
+               e2 <- expr;
+               schar '}'
+               return $ SendMessage e1 e2
+        <|> do symbol "self"
+               schar '.'
+               n <- name
+               return $ ReadField n
+      --  <|> do e <- expr
+      --         schar '.'
+      --         n <- name
+      --         schar '('; as <- args; schar ')'
+      --         return $ CallMethod e n as
+        <|> do symbol "new"
+               n <- name
+               schar '('; as <- args; schar ')'
+               return $ New n as
+        <|> do schar '('; e <- expr; schar ')'
+               return e
+               
 cases   = many1 casee
           <|> return [ ]
           
@@ -186,16 +235,5 @@ name = token $
 
 -- Make this prettier at some point
 natoms :: Char -> Bool
-natoms c | isLetter c = True | isDigit  c = True | c == '_'   = True
+natoms c | isLetter c = True | isDigit  c = True | c == '_' = True
          | otherwise  = False
-
-----Backup of above, just remove.
---name = token $ do h <- letter
---                  t <- many1 ( letter <|> num <|> underscore )
---                  case (elem (h:t) reserved) of
---                   True      -> reject
---                   otherwise -> return (h:t)
-                         
---  where letter     = satisfy isLetter
---        num        = satisfy isDigit
---        underscore = schar '_'
