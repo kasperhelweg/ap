@@ -19,10 +19,9 @@ main = do nameUS
           nameUF
 
           integerUS
+          stringUS
 
 --quickCheck ((\s -> s == s) :: [Char] -> Bool)
-
-
 
 -------------- NAME -------------- 
 nameF input = return $ parse ( name >> eof ) input
@@ -60,9 +59,18 @@ nameUF = do nameF "class" >>= \n -> case n of
                                     _  -> print "test failed"
 
 -------------- INTEGER --------------
-                                    
 integerF input = return $ parse ( integer >> eof ) input
 
 integerUS = do integerF " 1234333332221119999998885757574839" >>= \n -> case n of
                                                                          [] -> print "test failed"
                                                                          _  -> print "test OK"
+
+-------------- STRING --------------
+stringF input = return $ parse ( stringg >> eof ) input
+stringUS = do stringF "\"123433asd2221!!99999##88575g574839\"" >>= \n -> case n of
+                                                                        [] -> print "test failed"
+                                                                        _  -> print "test OK"
+
+stringUF = do stringF "\"123433332342&&111999\"99988asd57574839\"" >>= \n -> case n of
+                                                                        [] -> print "test failed"
+                                                                        _  -> print "test OK"

@@ -155,12 +155,13 @@ For testing my implementations I did two things : While developing i created
 Unit Tests
 \end_layout
 
-\begin_layout Subsection
-Integration Tests
+\begin_layout Standard
+The reason i wrote my unit tests from scratch and did not use HUnit or similar,
+ is simply 
 \end_layout
 
-\begin_layout Standard
-
+\begin_layout Subsection
+Integration Tests
 \end_layout
 
 \end_body
