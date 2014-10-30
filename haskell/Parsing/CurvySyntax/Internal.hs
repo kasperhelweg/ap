@@ -79,7 +79,7 @@ curves  = chainl1 curves' cop0
           <++ curve
 curves' = chainl1 curve   cop1
 -}
-        
+
 -- C0 : Curves without left recursion, but no precedense
 curves = do c  <- curvet
             cv <- curveopt c
