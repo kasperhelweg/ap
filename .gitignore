@@ -6,6 +6,9 @@
 *.html
 *.htm
 
+# Comps
+*.zip
+
 # Erlang
 *.beam
 
