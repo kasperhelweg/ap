@@ -12,6 +12,9 @@
 # Comps
 *.zip
 
+# Org
+*.org
+
 # Erlang
 *.beam
 
@@ -24,3 +27,4 @@ erlang/datasets/
 
 # Misc
 *#*
+

@@ -83,6 +83,82 @@ figs-within-sections
 
 \begin_body
 
+\begin_layout Title
+Advanced Programming Exam 2014
+\end_layout
+
+\begin_layout Author
+Kasper Helweg Jonassen
+\end_layout
+
+\begin_layout Part
+The FAST Language
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+asdasd
+\end_layout
+
+\begin_layout Subsection
+General Haskell
+\end_layout
+
+\begin_layout Standard
+In general I believe in understandable code much more than clever code.....
+\end_layout
+
+\begin_layout Standard
+For example, the following makes sense to me ...
+ do <-
+\end_layout
+
+\begin_layout Standard
+on the other hand, if the value is not needed later or is immediately chained
+ i would prefer the explicit >>= notation.
+\begin_inset Newline newline
+\end_inset
+
+Thr $ notation is used primarily for long expressions going, for example
+ ...
+ makes sense, whereas ...
+ i would use ()
+\end_layout
+
+\begin_layout Section
+The FAST Grammer
+\end_layout
+
+\begin_layout Section
+The FAST Parser
+\end_layout
+
+\begin_layout Section
+The FAST Interpreter
+\end_layout
+
+\begin_layout Section
+Assesments and Test
+\end_layout
+
+\begin_layout Standard
+For testing my implementations I did two things : While developing i created
+ a series of unit test to test the functionality of each individual function.
+ After that i created integration tests to test the implemetation as a whole.
+ 
+\end_layout
+
+\begin_layout Subsection
+Unit Tests
+\end_layout
+
+\begin_layout Subsection
+Integration Tests
+\end_layout
+
 \begin_layout Standard
 
 \end_layout
