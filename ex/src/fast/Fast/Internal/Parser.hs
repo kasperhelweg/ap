@@ -126,11 +126,9 @@ exprs = do e <- expr
         <|> return [ ]
 
 -- Look into the naming of these
-expr  = chainl1 expr' eop0
+expr   = chainl1 expr' eop0
          <++ expro
-expr' = chainl1 expro eop1
-
-
+expr'  = chainl1 expro eop1
 
 -- some of this could be refactored alot. for example 'set'
 expro = do i <- integer
@@ -174,6 +172,13 @@ expro = do i <- integer
                schar '.'
                n <- name
                return $ ReadField n
+               -- current problem is how to make this immediate left recursive
+               -- alternative work. f.ex., the string:
+               -- "class Fact {fact (n) {  match n {  0 -> { 1; } x -> { n * self.fact(n-1); }    };  }}"
+               -- will fail at (n-1) because the production just above (self .) has been chosen, but
+               -- the correct prodcution is the one commented out below. So, the strig:
+               --"class Fact {fact (n) {  match n {  0 -> { 1; } x -> { n * self.fact; }    };  }}"
+               -- will parse just fine
       --  <|> do e <- expr
       --         schar '.'
       --         n <- name

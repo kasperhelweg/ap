@@ -40,28 +40,28 @@ data Value = TermValue Term
            deriving (Eq, Show)
 
 -- | A Fast expression.  May execute slowly.
-data Expr = IntConst Integer
-          | StringConst String
-          | TermLiteral Name [Expr]
-          | Self
-          | Plus Expr Expr
-          | Minus Expr Expr
-          | Times Expr Expr
-          | DividedBy Expr Expr
-          | Return Expr
-          | SetField Name Expr
-          | SetVar Name Expr
-          | ReadVar Name
-          | ReadField Name
-          | Match Expr Cases
-          | SendMessage
-            Expr -- ^ Receiver
-            Expr -- ^ The message
+data Expr = IntConst Integer             --
+          | StringConst String           --
+          | TermLiteral Name [Expr]      --      
+          | Self                         --
+          | Plus Expr Expr               --
+          | Minus Expr Expr              --
+          | Times Expr Expr              --
+          | DividedBy Expr Expr          --
+          | Return Expr                  --
+          | SetField Name Expr           --
+          | SetVar Name Expr             --
+          | ReadVar Name                 --
+          | ReadField Name               --
+          | Match Expr Cases             --
+          | SendMessage                  --
+            Expr -- ^ Receiver           --
+            Expr -- ^ The message        --
           | CallMethod
             Expr -- ^ Receiver
             Name -- ^ Method name
             [Expr] -- ^ Method arguments
-          | New Name [Expr]
+          | New Name [Expr]              --
           deriving (Eq, Show)
 
 type Exprs = [Expr]
