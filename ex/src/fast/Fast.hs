@@ -4,11 +4,11 @@ module Main
        (main)
 where
 
-import FastParser
-import FastInterpreter
+import Fast.FastParser
+--import Fast.FastInterpreter
 
 import System.Environment
-
+{-
 main :: IO ()
 main = do args <- getArgs
           case args of
@@ -22,3 +22,7 @@ main = do args <- getArgs
                     Right output -> putStr output
             _ ->
               error "Give me a (single) argument!"
+-}
+
+main :: IO ()
+main = undefined

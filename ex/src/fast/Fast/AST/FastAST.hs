@@ -1,5 +1,5 @@
 -- | An abstract syntax tree definition for the Fast language.
-module FastAST
+module Fast.AST.FastAST
        ( Term (..)
        , ObjectReference
        , Value (..)

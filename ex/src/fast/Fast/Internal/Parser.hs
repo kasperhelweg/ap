@@ -1,11 +1,12 @@
-module FastParser
+module Fast.Internal.Parser
        ( Error
        , parseString
        , parseFile
        )
        where
 
-import FastAST
+import Fast.AST.FastAST
+import Lib.SimpleParse
 
 -- | You may change this type to whatever you want - just make sure it
 -- is an instance of 'Show'.

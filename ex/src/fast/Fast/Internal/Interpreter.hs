@@ -1,10 +1,10 @@
-module FastInterpreter
+module Fast.Internal.Interpreter
        ( runProg
        , Error (..)
        )
        where
 
-import FastAST
+import Fast.AST.FastAST
 
 import Control.Applicative
 import Control.Monad
@@ -28,7 +28,8 @@ printed (TermValue (Term sym vs)) =
 -- | A key-value store where the keys are of type @k@, and the values
 -- are of type @v@.  Used for mapping object references to objects and
 -- variable names to values.
-type Store k v = ...
+
+-- type Store k v = ...
 
 -- | A mapping from object references to objects.
 type GlobalStore = Store ObjectReference ObjectState
@@ -51,10 +52,11 @@ data MethodState
 -- | The basic monad in which execution of a Fast program takes place.
 -- Maintains the global state, the running output, and whether or not
 -- an error has occurred.
-data FastM a = FastM {
-  runFastM :: Prog -> GlobalState
-           -> ...
-  }
+
+--  data FastM a = FastM {
+--  runFastM :: Prog -> GlobalState
+--           -> ...
+--  }
 
 instance Functor FastM where
   fmap = liftM
@@ -107,10 +109,11 @@ allocUniqID = undefined
 --
 -- Note that since FastMethodM runs on top of FastM, a FastMethodM
 -- action has access to the global state (through liftFastM).
-data FastMethodM a = FastMethodM {
-  runFastMethodM :: ObjectReference -> MethodState
-                 -> FastM ...
-  }
+
+-- data FastMethodM a = FastMethodM {
+--  runFastMethodM :: ObjectReference -> MethodState
+--                 -> ...
+--  }
 
 instance Functor FastMethodM where
   fmap = liftM
