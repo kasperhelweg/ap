@@ -6,6 +6,9 @@
 *.html
 *.htm
 
+# Documents
+*.pdf
+
 # Comps
 *.zip
 
